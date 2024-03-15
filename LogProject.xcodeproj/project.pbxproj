@@ -16,6 +16,7 @@
 		520AC23D2BA4284E00B8151D /* LogProjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 520AC23C2BA4284E00B8151D /* LogProjectTests.swift */; };
 		520AC2472BA4284E00B8151D /* LogProjectUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 520AC2462BA4284E00B8151D /* LogProjectUITests.swift */; };
 		520AC2492BA4284E00B8151D /* LogProjectUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 520AC2482BA4284E00B8151D /* LogProjectUITestsLaunchTests.swift */; };
+		520AC2572BA4289800B8151D /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 520AC2562BA4289800B8151D /* Log.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		520AC2422BA4284E00B8151D /* LogProjectUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LogProjectUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		520AC2462BA4284E00B8151D /* LogProjectUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogProjectUITests.swift; sourceTree = "<group>"; };
 		520AC2482BA4284E00B8151D /* LogProjectUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogProjectUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		520AC2562BA4289800B8151D /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +101,7 @@
 		520AC2242BA4284D00B8151D /* LogProject */ = {
 			isa = PBXGroup;
 			children = (
+				520AC2552BA4289300B8151D /* Log */,
 				520AC2252BA4284D00B8151D /* AppDelegate.swift */,
 				520AC2272BA4284D00B8151D /* SceneDelegate.swift */,
 				520AC2292BA4284D00B8151D /* ViewController.swift */,
@@ -125,6 +128,14 @@
 				520AC2482BA4284E00B8151D /* LogProjectUITestsLaunchTests.swift */,
 			);
 			path = LogProjectUITests;
+			sourceTree = "<group>";
+		};
+		520AC2552BA4289300B8151D /* Log */ = {
+			isa = PBXGroup;
+			children = (
+				520AC2562BA4289800B8151D /* Log.swift */,
+			);
+			path = Log;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -260,6 +271,7 @@
 			files = (
 				520AC22A2BA4284D00B8151D /* ViewController.swift in Sources */,
 				520AC2262BA4284D00B8151D /* AppDelegate.swift in Sources */,
+				520AC2572BA4289800B8151D /* Log.swift in Sources */,
 				520AC2282BA4284D00B8151D /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
