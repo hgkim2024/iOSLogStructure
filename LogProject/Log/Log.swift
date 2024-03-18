@@ -7,83 +7,133 @@
 
 import UIKit
 
-// MARK: - Tag
+// MARK: - Log Tag
 enum Tag: String {
     case CALL
     case FLOOR
-    case Message
+    case MESSAGE
+    case GROUP
     case NOTIFY
+    case NONE
+}
+
+// MARK: - Log Level
+enum LogLevel: String {
+    case TRACE
+    case DEBUG
+    case WARNING
+    case ERROR
+    case FATAL
     case NONE
 }
 
 // MARK: - Log
 class Log {
     
-    static private var isLog = true
-    
-    static private var logIdMap = [String: Tag]()
+    static private var logLevel = LogLevel.TRACE
+    static private var logIdMap = [String: [Tag]]()
     
     static func tag(_ format: Tag, file: String = #file, line: Int = #line, function: String = #function) -> Log.Type {
-        if isLog {
-            let key = "\(file)_\(line)_\(function)"
-            logIdMap[key] = format
+        let fileName = URL(fileURLWithPath: file).lastPathComponent
+        let key = "\(fileName)_\(line)_\(function)"
+        if logIdMap[key] == nil {
+            logIdMap[key] = []
         }
+        logIdMap[key]?.append(format)
         return Log.self
     }
     
-    static private func logPrint(_ message: String, file: String, line: Int, function: String) {
-        if isLog {
-            let key = "\(file)_\(line)_\(function)"
-            let tag = logIdMap[key] ?? Tag.NONE
-            let content = "[\(file)]:\(line) - \(function): \(message)"
-            
-            if case Tag.NONE = tag {
-                print("\(content)")
-            } else {
-                print("[\(tag)] - \(content)")
-            }
-            
-            logIdMap[key] = nil
+    static private func printLog(_ message: String, logLevel: LogLevel, file: String, line: Int, function: String) {
+        if isNotPrintLog(logLevel: logLevel) {
+            return
         }
+        
+        let fileName = URL(fileURLWithPath: file).lastPathComponent
+        let key = "\(fileName)_\(line)_\(function)"
+        var tag = ""
+        
+        if logIdMap[key] == nil {
+            logIdMap[key] = [Tag.NONE]
+        }
+        
+        if  let tags = logIdMap[key] {
+            for t in tags {
+                tag += "[\(t.rawValue)]"
+            }
+        }
+        
+        let content = "[\(logLevel.rawValue)] \(tag) [\(fileName)]:\(line) - \(function): \(message)"
+        
+        NSLog(content)
+//        LinphoneManager.instance().printLog(tag, message: content, level: logLevel.linphoneLogLevel)
+        
+        logIdMap[key] = nil
     }
     
-    // info
-    static func i(_ format: String, file: String = #file, line: Int = #line, function: String = #function) {
-        logPrint(format, file: file, line: line, function: function)
+    // trace
+    static func t(_ format: String, file: String = #file, line: Int = #line, function: String = #function) {
+        printLog(format, logLevel: LogLevel.TRACE, file: file, line: line, function: function)
     }
     
     // debug
     static func d(_ format: String, file: String = #file, line: Int = #line, function: String = #function) {
-        logPrint(format, file: file, line: line, function: function)
+        printLog(format, logLevel: LogLevel.DEBUG, file: file, line: line, function: function)
     }
     
     // warning
     static func w(_ format: String, file: String = #file, line: Int = #line, function: String = #function) {
-        logPrint(format, file: file, line: line, function: function)
+        printLog(format, logLevel: LogLevel.WARNING, file: file, line: line, function: function)
+    }
+    
+    // error
+    static func e(_ format: String, file: String = #file, line: Int = #line, function: String = #function) {
+        printLog(format, logLevel: LogLevel.ERROR, file: file, line: line, function: function)
     }
     
     // fatal
     static func f(_ format: String, file: String = #file, line: Int = #line, function: String = #function) {
-        logPrint(format, file: file, line: line, function: function)
+        printLog(format, logLevel: LogLevel.FATAL, file: file, line: line, function: function)
+    }
+    
+    static func isNotPrintLog(logLevel: LogLevel) -> Bool {
+        switch self.logLevel {
+        case .TRACE:
+            return false
+            
+        case .DEBUG:
+            switch logLevel {
+            case .TRACE:
+                return true
+            default:
+                return false
+            }
+            
+        case .WARNING:
+            switch logLevel {
+            case .TRACE, .DEBUG:
+                return true
+            default:
+                return false
+            }
+            
+        case .ERROR:
+            switch logLevel {
+            case .TRACE, .DEBUG, .WARNING:
+                return true
+            default:
+                return false
+            }
+            
+        case .FATAL:
+            switch logLevel {
+            case .TRACE, .DEBUG, .WARNING, .ERROR:
+                return true
+            default:
+                return false
+            }
+            
+        case .NONE:
+            return true
+        }
     }
 }
-
-// MARK: - Test Function
-//func main() {
-//    Log.tag(Tag.CALL).i("message")
-//    Log.tag(Tag.FLOOR).d("message")
-//    Log.tag(Tag.Message).w("message")
-//    Log.tag(Tag.NOTIFY).f("message")
-//    
-//    Log.tag(Tag.NOTIFY).d("asdff")
-//    
-//    Log.tag(Tag.CALL).tag(Tag.FLOOR).i("asdf")
-//
-//    
-//    IPGLog("")
-//    IPGLog(tag: "", message: "", lvl: .LOG_LEVEL_DEBUG)
-//    
-//    Log.d("asdf")
-//}
-//
-//main()
