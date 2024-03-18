@@ -101,7 +101,7 @@ class Log {
         printLog(format, logLevel: LogLevel.FATAL, file: file, line: line, function: function)
     }
     
-    static func isNotPrintLog(logLevel: LogLevel) -> Bool {
+    static private func isNotPrintLog(logLevel: LogLevel) -> Bool {
         switch self.logLevel {
         case .TRACE:
             return false
