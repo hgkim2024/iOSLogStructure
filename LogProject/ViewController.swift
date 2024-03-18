@@ -13,6 +13,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         // MARK: - Test Function
+        Log.setLogLevel(LogLevel.DEBUG)
         Log.tag(Tag.CALL).t("message")
         Log.tag(Tag.FLOOR).tag(Tag.CALL).d("message")
         Log.tag(Tag.MESSAGE).tag(Tag.FLOOR).tag(Tag.CALL).w("message")

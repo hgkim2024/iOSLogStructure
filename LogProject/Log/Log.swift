@@ -33,6 +33,10 @@ class Log {
     static private var logLevel = LogLevel.TRACE
     static private var logIdMap = [String: [Tag]]()
     
+    static func setLogLevel(_ logLevel: LogLevel) {
+        self.logLevel = logLevel
+    }
+    
     static func tag(_ format: Tag, file: String = #file, line: Int = #line, function: String = #function) -> Log.Type {
         let fileName = URL(fileURLWithPath: file).lastPathComponent
         let key = "\(fileName)_\(line)_\(function)"
@@ -44,12 +48,14 @@ class Log {
     }
     
     static private func printLog(_ message: String, logLevel: LogLevel, file: String, line: Int, function: String) {
-        if isNotPrintLog(logLevel: logLevel) {
-            return
-        }
-        
         let fileName = URL(fileURLWithPath: file).lastPathComponent
         let key = "\(fileName)_\(line)_\(function)"
+        
+        if isNotPrintLog(logLevel: logLevel) {
+            logIdMap[key] = nil
+            return
+        }
+
         var tag = ""
         
         if logIdMap[key] == nil {
