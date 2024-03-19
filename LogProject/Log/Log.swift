@@ -37,15 +37,15 @@ class Log {
         self.logLevel = logLevel
     }
     
-    static func tag(_ format: Tag, file: String = #file, line: Int = #line, function: String = #function) -> Log.Type {
+    static func tag(_ tag: Tag, file: String = #file, line: Int = #line, function: String = #function) -> Log.Type {
         let fileName = URL(fileURLWithPath: file).lastPathComponent
         let key = "\(fileName)_\(line)_\(function)"
         if let initValue = logTagMap[key] {
             if var list = initValue as? [Tag] {
-                list.append(format)
+                list.append(tag)
             }
         } else {
-            logTagMap[key] = [format]
+            logTagMap[key] = [tag]
         }
         
         return Log.self
