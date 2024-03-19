@@ -31,7 +31,7 @@ enum LogLevel: String {
 class Log {
     
     static private var logLevel = LogLevel.TRACE
-        static private var logTagMap = NSMutableDictionary() // : [String: [Tag]]()
+    static private var logTagMap = NSMutableDictionary() // : [String: [Tag]]()
     
     static func setLogLevel(_ logLevel: LogLevel) {
         self.logLevel = logLevel
