@@ -31,7 +31,8 @@ enum LogLevel: String {
 class Log {
     
     static private var logLevel = LogLevel.TRACE
-    static private var logIdMap = [String: [Tag]]()
+    //    static private var logIdMap = [String: [Tag]]()
+        static private var logTagMap = NSMutableDictionary()
     
     static func setLogLevel(_ logLevel: LogLevel) {
         self.logLevel = logLevel
@@ -40,10 +41,14 @@ class Log {
     static func tag(_ format: Tag, file: String = #file, line: Int = #line, function: String = #function) -> Log.Type {
         let fileName = URL(fileURLWithPath: file).lastPathComponent
         let key = "\(fileName)_\(line)_\(function)"
-        if logIdMap[key] == nil {
-            logIdMap[key] = []
+        if let initValue = logTagMap[key] {
+            if var list = initValue as? [Tag] {
+                list.append(format)
+            }
+        } else {
+            logTagMap[key] = [format]
         }
-        logIdMap[key]?.append(format)
+        
         return Log.self
     }
     
@@ -52,17 +57,17 @@ class Log {
         let key = "\(fileName)_\(line)_\(function)"
         
         if isNotPrintLog(logLevel: logLevel) {
-            logIdMap[key] = nil
+            logTagMap[key] = nil
             return
         }
 
         var tag = ""
         
-        if logIdMap[key] == nil {
-            logIdMap[key] = [Tag.NONE]
+        if logTagMap[key] == nil {
+            logTagMap[key] = [Tag.NONE]
         }
         
-        if  let tags = logIdMap[key] {
+        if  let tags = logTagMap[key] as? [Tag] {
             for t in tags {
                 tag += "[\(t.rawValue)]"
             }
@@ -73,7 +78,7 @@ class Log {
         NSLog(content)
 //        LinphoneManager.instance().printLog(tag, message: content, level: logLevel.linphoneLogLevel)
         
-        logIdMap[key] = nil
+        logTagMap[key] = nil
     }
     
     // trace
