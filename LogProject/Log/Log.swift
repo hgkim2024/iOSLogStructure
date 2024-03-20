@@ -78,7 +78,7 @@ class Log {
         if let initValue = logTagMap[key] {
             if var list = initValue as? [Tag] {
                 list.append(contentsOf: tags)
-                logTagMap[key] = list
+                logTagMap[key] = list.filter({$0 != Tag.NONE})
             }
         } else {
             logTagMap[key] = tags
