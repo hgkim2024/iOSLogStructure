@@ -23,6 +23,14 @@ Log.tag(Tag.CALL).tag([Tag.URI, Tag.NAME]).d("message")
 ```
 <br>
 
+- 결과
+```
+[ERROR] [FLOOR][GROUP][URI] [ViewController.swift]:18 - viewDidLoad(): message
+[DEBUG] [CALL][URI] [ViewController.swift]:19 - viewDidLoad(): message
+[DEBUG] [MSG][NOTIFY][URI] [ViewController.swift]:20 - viewDidLoad(): message
+[DEBUG] [CALL][URI][NAME] [ViewController.swift]:21 - viewDidLoad(): message
+```
+
 ### Tag
 ---
 - 여러개 Tag 를 추가 할 수 있다.
