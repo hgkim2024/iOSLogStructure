@@ -59,6 +59,7 @@ static func tag(_ tags: [Tag], file: String = #file, line: Int =#line, function:
 ### Tag Priority
 ---
 - Tag enum Type 을 Int 로 지정하여 Tag를 오름차순으로 출력한다.
+- NONE Tag 는 사용자가 추가해도 출력되지 않는다. Tag 가 없을 때만 NONE Tag 로 출력된다.
 
 ```swift
 // MARK: - Log Tag
