@@ -152,7 +152,7 @@ static private func printLog(_ message: String, logLevel: LogLevel,file: String,
     let content = "[\(logLevel.rawValue)] \(tag) [\(fileName)]:\(line) - \(function): \(message)"
     
     NSLog(content)
-      LinphoneManager.instance().printLog(tag, message: content, l: logLevel.linphoneLogLevel)
+//    LinphoneManager.instance().printLog(tag, message: content, l: logLevel.linphoneLogLevel)
     
     logTagMap[key] = nil
 }
