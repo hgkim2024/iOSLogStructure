@@ -8,20 +8,32 @@
 import UIKit
 
 // MARK: - Log Tag
-enum Tag: String {
+enum Tag: Int {
     // MARK: - 상위 테그
     case CALL
     case FLOOR
-    case MESSAGE = "MSG" // : Log Level 에 MESSAGE 가 있어 MSG 로 수정
+    case MESSAGE
     case GROUP
     case NOTIFY
-    case NONE
     
     // MARK: - 하위 테그
     case URI
     case NAME
     case ID
+    
+    // MARK: - NONE 태그
+    case NONE
+    
+    var title: String {
+        return switch self {
+        case .MESSAGE:
+            "MSG" // : Log Level 에 MESSAGE 가 있어 MSG 로 수정
+        default:
+            String(describing: self)
+        }
+    }
 }
+
 
 // MARK: - Log Level
 enum LogLevel: String {
@@ -87,9 +99,9 @@ class Log {
             logTagMap[key] = [Tag.NONE]
         }
         
-        if  let tags = logTagMap[key] as? [Tag] {
+        if  let tags = (logTagMap[key] as? [Tag])?.sorted(by: {$0.rawValue < $1.rawValue}) {
             for t in tags {
-                tag += "[\(t.rawValue)]"
+                tag += "[\(t.title)]"
             }
         }
         
