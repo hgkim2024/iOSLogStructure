@@ -81,7 +81,7 @@ class Log {
                 logTagMap[key] = list.filter({$0 != Tag.NONE})
             }
         } else {
-            logTagMap[key] = tags
+            logTagMap[key] = tags.filter({$0 != Tag.NONE})
         }
     }
     
