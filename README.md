@@ -10,8 +10,7 @@
 <br>
 
 
-### 사용법
----
+## 사용법
 
 ```swift
 Log.setLogLevel(LogLevel.DEBUG)
@@ -31,8 +30,7 @@ Log.tag(Tag.CALL).tag([Tag.URI, Tag.NAME]).d("message")
 [DEBUG] [CALL][URI][NAME] [ViewController.swift]:21 - viewDidLoad(): message
 ```
 
-### Tag
----
+## Tag
 - 여러개 Tag 를 추가 할 수 있다.
 - tag 입력은 Tag enum class 만 가능하며, 단일과 리스트 형태의 파라미터를 허용한다.
 - Tag 를 설정하지 않으면 Tag.NONE 으로 할당된다.
@@ -56,8 +54,7 @@ static func tag(_ tags: [Tag], file: String = #file, line: Int =#line, function:
 ```
 <br>
 
-### Tag Priority
----
+## Tag Priority
 - Tag enum Type 을 Int 로 지정하여 Tag를 오름차순으로 출력한다.
 - NONE Tag 는 사용자가 추가해도 출력되지 않는다. Tag 가 없을 때만 NONE Tag 로 출력된다.
 
@@ -88,8 +85,7 @@ enum Tag: Int {
 ```
 <br>
 
-### Log Level
----
+## Log Level
 - Log Level 종류는 TRACE, DEBUG, WARNING, ERROR, FATAL 로 총 5가지 Level 이 있다.
 - Log Level 종류에 앞 이니셜만 가져와 함수로 만들었다.
 ```swift
@@ -121,8 +117,7 @@ static func f(_ format: String, file: String = #file, line: Int =#line, function
 
 <br>
 
-### Print Log
----
+## Print Log
 - Log Class 에서 Log Level 을 설정하면 해당 기준으로 아래 Level 로그만 출력한다.
 - Log Level 에 따라 print 될 때 “[LogLevel]” 이 가장 앞에 표기된다.
 - 설정된 테그는 Log Level 뒤에 [Tag1][Tag2][Tag3] ... [TagN] 으로 표기된다.
@@ -160,6 +155,5 @@ static private func printLog(_ message: String, logLevel: LogLevel,file: String,
 
 <br>
 
-### Blog Link
----
+## Blog Link
 - https://www.notion.so/Log-Structure-7ed8252e54314b389bf79f1da5beab97?pvs=4
