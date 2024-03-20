@@ -23,7 +23,7 @@ Log.tag(Tag.CALL).tag([Tag.URI, Tag.NAME]).d("message")
 ```
 <br>
 
-### TAG
+### Tag
 ---
 - 여러개 Tag 를 추가 할 수 있다.
 - tag 입력은 Tag enum class 만 가능하며, 단일과 리스트 형태의 파라미터를 허용한다.
@@ -48,35 +48,66 @@ static func tag(_ tags: [Tag], file: String = #file, line: Int =#line, function:
 ```
 <br>
 
+### Tag Priority
+---
+- Tag enum Type 을 Int 로 지정하여 Tag를 오름차순으로 출력한다.
+
+```swift
+// MARK: - Log Tag
+enum Tag: Int {
+    // MARK: - 상위 테그
+    case CALL
+    case FLOOR
+    case MESSAGE
+    
+    // MARK: - 하위 테그
+    case URI
+    case NAME
+    
+    // MARK: - NONE 태그
+    case NONE
+    
+    var title: String {
+        return switch self {
+        case .MESSAGE:
+            "MSG" // : Log Level 에 MESSAGE 가 있어 MSG 로 수정
+        default:
+            String(describing: self)
+        }
+    }
+}
+```
+<br>
+
 ### Log Level
 ---
 - Log Level 종류는 TRACE, DEBUG, WARNING, ERROR, FATAL 로 총 5가지 Level 이 있다.
 - Log Level 종류에 앞 이니셜만 가져와 함수로 만들었다.
 ```swift
-    // trace
-    static func t(_ format: String, file: String = #file, line: Int = #line, function: String = #function) {
-        printLog(format, logLevel: LogLevel.TRACE, file: file, line: line, function: function)
-    }
-    
-    // debug
-    static func d(_ format: String, file: String = #file, line: Int = #line, function: String = #function) {
-        printLog(format, logLevel: LogLevel.DEBUG, file: file, line: line, function: function)
-    }
-    
-    // warning
-    static func w(_ format: String, file: String = #file, line: Int = #line, function: String = #function) {
-        printLog(format, logLevel: LogLevel.WARNING, file: file, line: line, function: function)
-    }
-    
-    // error
-    static func e(_ format: String, file: String = #file, line: Int = #line, function: String = #function) {
-        printLog(format, logLevel: LogLevel.ERROR, file: file, line: line, function: function)
-    }
-    
-    // fatal
-    static func f(_ format: String, file: String = #file, line: Int = #line, function: String = #function) {
-        printLog(format, logLevel: LogLevel.FATAL, file: file, line: line, function: function)
-    }
+// trace
+static func t(_ format: String, file: String = #file, line: Int =#line, function: String = #function) {
+    printLog(format, logLevel: LogLevel.TRACE, file: file, line: line, function: function)
+}
+
+// debug
+static func d(_ format: String, file: String = #file, line: Int =#line, function: String = #function) {
+    printLog(format, logLevel: LogLevel.DEBUG, file: file, line: line, function: function)
+}
+
+// warning
+static func w(_ format: String, file: String = #file, line: Int =#line, function: String = #function) {
+    printLog(format, logLevel: LogLevel.WARNING, file: file, line: line, function: function)
+}
+
+// error
+static func e(_ format: String, file: String = #file, line: Int =#line, function: String = #function) {
+    printLog(format, logLevel: LogLevel.ERROR, file: file, line: line, function: function)
+}
+
+// fatal
+static func f(_ format: String, file: String = #file, line: Int =#line, function: String = #function) {
+    printLog(format, logLevel: LogLevel.FATAL, file: file, line: line, function: function)
+}
 ```
 
 <br>
@@ -89,29 +120,30 @@ static func tag(_ tags: [Tag], file: String = #file, line: Int =#line, function:
 - 회사에서는 LinphoneManager SDK 에서 Log 를 출력한다. 출력 결과는 NSLog 동일하다. 단지 SDK Log 는 일부 메세지를 가리거나 특정 처리가 들어간다.
 
 ```swift
-static private func printLog(_ message: String, logLevel: LogLevel, file: String, line: Int, function: String) {
-    let fileName = URL(fileURLWithPath: file).lastPathComponent
-    let key = "\(fileName)_\(line)_\(function)"
+static private func printLog(_ message: String, logLevel: LogLevel,file: String, line: Int, function: String) {
+    let key = getKey(file: file, line: line, function: function)
     
     if isNotPrintLog(logLevel: logLevel) {
         logTagMap[key] = nil
         return
-    }    var tag = ""
+    }
+    var tag = ""
     
     if logTagMap[key] == nil {
         logTagMap[key] = [Tag.NONE]
     }
     
-    if  let tags = logTagMap[key] as? [Tag] {
+    if  let tags = (logTagMap[key] as? [Tag])?.sorted(by: {$0.rawValue < $1.rawValue}) {
         for t in tags {
-            tag += "[\(t.rawValue)]"
+            tag += "[\(t.title)]"
         }
     }
     
+    let fileName = URL(fileURLWithPath: file).lastPathComponent
     let content = "[\(logLevel.rawValue)] \(tag) [\(fileName)]:\(line) - \(function): \(message)"
     
     NSLog(content)
-    // LinphoneManager.instance().printLog(tag, message: content, level: logLevel.linphoneLogLevel)
+      LinphoneManager.instance().printLog(tag, message: content, l: logLevel.linphoneLogLevel)
     
     logTagMap[key] = nil
 }
