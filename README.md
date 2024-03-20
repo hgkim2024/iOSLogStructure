@@ -118,3 +118,7 @@ static private func printLog(_ message: String, logLevel: LogLevel, file: String
 ```
 
 <br>
+
+### Blog LINK
+---
+- https://www.notion.so/Log-Structure-7ed8252e54314b389bf79f1da5beab97?pvs=4
