@@ -1,7 +1,9 @@
 # Swift Log Structure
 > Log Structure 를 개발하게된 이유는 현재 개발 중인 프로젝트가 디버깅 할 때 99% 로 Log 를 기반으로 한다. 그러나 Log 사용법이 불편했다. “Log 사용이 간편하게 하려면 어떻게 하면 좋을까?” 라는 고민을 시작으로 Log Structure 라는 결과물이 나왔다.
 <br>
+
 - 아래와 같이 LogFilter App 에서 Tag Filter 를 사용하여 원하는 Log 를 볼 수 있다.
+
 <img width="95%" alt="LogFilter" src="https://github.com/hgkim2024/Log/assets/163487894/70f4c489-7339-42d0-b3dc-a65be3483295">
 <br>
 <br>
