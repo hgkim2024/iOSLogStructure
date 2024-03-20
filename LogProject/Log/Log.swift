@@ -66,6 +66,7 @@ class Log {
         if let initValue = logTagMap[key] {
             if var list = initValue as? [Tag] {
                 list.append(contentsOf: tags)
+                logTagMap[key] = list
             }
         } else {
             logTagMap[key] = tags
