@@ -15,10 +15,8 @@ class ViewController: UIViewController {
         // MARK: - Test Function
         Log.setLogLevel(LogLevel.DEBUG)
         Log.tag(Tag.CALL).t("message")
-        Log.tag(Tag.FLOOR).tag(Tag.CALL).d("message")
-        Log.tag(Tag.MESSAGE).tag(Tag.FLOOR).tag(Tag.CALL).w("message")
-        Log.tag(Tag.GROUP).e("message")
-        Log.tag(Tag.NOTIFY).f("message")
+        Log.tag(Tag.GROUP).tag(Tag.URI).e("message")
+        Log.tag([Tag.CALL, Tag.URI]).d("message")
     }
 
 

@@ -9,12 +9,18 @@ import UIKit
 
 // MARK: - Log Tag
 enum Tag: String {
+    // MARK: - 상위 테그
     case CALL
     case FLOOR
-    case MESSAGE
+    case MESSAGE = "MSG" // : Log Level 에 MESSAGE 가 있어 MSG 로 수정
     case GROUP
     case NOTIFY
     case NONE
+    
+    // MARK: - 하위 테그
+    case URI
+    case NAME
+    case ID
 }
 
 // MARK: - Log Level
@@ -37,23 +43,37 @@ class Log {
         self.logLevel = logLevel
     }
     
+    static private func getKey(file: String, line: Int, function: String) -> String {
+        return "\(file)_\(line)_\(function)"
+    }
+    
     static func tag(_ tag: Tag, file: String = #file, line: Int = #line, function: String = #function) -> Log.Type {
-        let fileName = URL(fileURLWithPath: file).lastPathComponent
-        let key = "\(fileName)_\(line)_\(function)"
-        if let initValue = logTagMap[key] {
-            if var list = initValue as? [Tag] {
-                list.append(tag)
-            }
-        } else {
-            logTagMap[key] = [tag]
-        }
+        let key = getKey(file: file, line: line, function: function)
+        setTags([tag], key: key)
         
         return Log.self
     }
     
+    
+    static func tag(_ tags: [Tag], file: String = #file, line: Int = #line, function: String = #function) -> Log.Type {
+        let key = getKey(file: file, line: line, function: function)
+        setTags(tags, key: key)
+        
+        return Log.self
+    }
+    
+    static private func setTags(_ tags: [Tag], key: String) {
+        if let initValue = logTagMap[key] {
+            if var list = initValue as? [Tag] {
+                list.append(contentsOf: tags)
+            }
+        } else {
+            logTagMap[key] = tags
+        }
+    }
+    
     static private func printLog(_ message: String, logLevel: LogLevel, file: String, line: Int, function: String) {
-        let fileName = URL(fileURLWithPath: file).lastPathComponent
-        let key = "\(fileName)_\(line)_\(function)"
+        let key = getKey(file: file, line: line, function: function)
         
         if isNotPrintLog(logLevel: logLevel) {
             logTagMap[key] = nil
@@ -72,6 +92,7 @@ class Log {
             }
         }
         
+        let fileName = URL(fileURLWithPath: file).lastPathComponent
         let content = "[\(logLevel.rawValue)] \(tag) [\(fileName)]:\(line) - \(function): \(message)"
         
         NSLog(content)
