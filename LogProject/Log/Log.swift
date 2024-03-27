@@ -106,7 +106,7 @@ class Log {
         }
         
         let fileName = URL(fileURLWithPath: file).lastPathComponent
-        let content = "[\(logLevel.rawValue)] \(tag) [\(fileName)]:\(line) - \(function): \(message)"
+        let content = "[\(logLevel.rawValue)] \(tag) [\(fileName)]:\(line) [\(function)]: - \(message)"
         
         NSLog(content)
 //        LinphoneManager.instance().printLog(tag, message: content, level: logLevel.linphoneLogLevel)
