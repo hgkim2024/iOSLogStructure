@@ -24,10 +24,10 @@ Log.tag(.CALL).tag([.URI, .NAME]).d("message")
 
 - 결과
 ```
-[ERROR] [FLOOR][GROUP][URI] [ViewController.swift]:18 - viewDidLoad(): message
-[DEBUG] [CALL][URI] [ViewController.swift]:19 - viewDidLoad(): message
-[DEBUG] [MSG][NOTIFY][URI] [ViewController.swift]:20 - viewDidLoad(): message
-[DEBUG] [CALL][URI][NAME] [ViewController.swift]:21 - viewDidLoad(): message
+[ERROR] [FLOOR][GROUP][URI] [ViewController.swift]:18 [viewDidLoad()] - message
+[DEBUG] [CALL][URI] [ViewController.swift]:19 [viewDidLoad()] - message
+[DEBUG] [MSG][NOTIFY][URI] [ViewController.swift]:20 [viewDidLoad()] - message
+[DEBUG] [CALL][URI][NAME] [ViewController.swift]:21 [viewDidLoad()] - message
 ```
 
 ## Tag
@@ -144,7 +144,7 @@ static private func printLog(_ message: String, logLevel: LogLevel,file: String,
     }
     
     let fileName = URL(fileURLWithPath: file).lastPathComponent
-    let content = "[\(logLevel.rawValue)] \(tag) [\(fileName)]:\(line) - \(function): \(message)"
+    let content = "[\(logLevel.rawValue)] \(tag) [\(fileName)]:\(line) [\(function)]: - \(message)"
     
     NSLog(content)
 //    LinphoneManager.instance().printLog(tag, message: content, l: logLevel.linphoneLogLevel)
