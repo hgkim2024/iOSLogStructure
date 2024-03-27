@@ -9,14 +9,14 @@ import UIKit
 
 // MARK: - Log Tag
 enum Tag: Int {
-    // MARK: - 상위 테그
+    // MARK: - 상위 태그
     case CALL
     case FLOOR
     case MESSAGE
     case GROUP
     case NOTIFY
     
-    // MARK: - 하위 테그
+    // MARK: - 하위 태그
     case URI
     case NAME
     case ID
