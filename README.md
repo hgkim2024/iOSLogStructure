@@ -14,11 +14,11 @@
 
 ```swift
 Log.setLogLevel(LogLevel.DEBUG)
-Log.tag(Tag.CALL).t("message")
-Log.tag(Tag.GROUP).tag(Tag.URI).tag(Tag.FLOOR).e("message")
-Log.tag([Tag.CALL, Tag.URI]).d("message")
-Log.tag([Tag.MESSAGE, Tag.NOTIFY]).tag(Tag.URI).d("message")
-Log.tag(Tag.CALL).tag([Tag.URI, Tag.NAME]).d("message")
+Log.tag(.CALL).t("message")
+Log.tag(.GROUP).tag(.URI).tag(.FLOOR).e("message")
+Log.tag([.CALL, Tag.URI]).d("message")
+Log.tag([.MESSAGE, .NOTIFY]).tag(.URI).d("message")
+Log.tag(.CALL).tag([.URI, .NAME]).d("message")
 ```
 <br>
 
@@ -61,12 +61,12 @@ static func tag(_ tags: [Tag], file: String = #file, line: Int =#line, function:
 ```swift
 // MARK: - Log Tag
 enum Tag: Int {
-    // MARK: - 상위 테그
+    // MARK: - 상위 태그
     case CALL
     case FLOOR
     case MESSAGE
     
-    // MARK: - 하위 테그
+    // MARK: - 하위 태그
     case URI
     case NAME
     
@@ -120,7 +120,7 @@ static func f(_ format: String, file: String = #file, line: Int =#line, function
 ## Print Log
 - Log Class 에서 Log Level 을 설정하면 해당 기준으로 아래 Level 로그만 출력한다.
 - Log Level 에 따라 print 될 때 “[LogLevel]” 이 가장 앞에 표기된다.
-- 설정된 테그는 Log Level 뒤에 [Tag1][Tag2][Tag3] ... [TagN] 으로 표기된다.
+- 설정된 태그는 Log Level 뒤에 [Tag1][Tag2][Tag3] ... [TagN] 으로 표기된다.
 - 회사에서는 LinphoneManager SDK 에서 Log 를 출력한다. 출력 결과는 NSLog 동일하다. 단지 SDK Log 는 일부 메세지를 가리거나 특정 처리가 들어간다.
 
 ```swift
