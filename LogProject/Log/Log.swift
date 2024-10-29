@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import os
 
 // MARK: - Log Tag
 enum Tag: Int {
@@ -20,6 +21,9 @@ enum Tag: Int {
     case URI
     case NAME
     case ID
+    
+    case SUCCESS
+    case FAIL
     
     // MARK: - NONE 태그
     case NONE
@@ -50,6 +54,7 @@ class Log {
     
     static private var logLevel = LogLevel.TRACE
     static private var logTagMap = NSMutableDictionary() // : [String: [Tag]]()
+    static private var logger = OSLog(subsystem: "AppName", category: "")
     
     static func setLogLevel(_ logLevel: LogLevel) {
         self.logLevel = logLevel
@@ -87,29 +92,33 @@ class Log {
     
     static private func printLog(_ message: String, logLevel: LogLevel, file: String, line: Int, function: String) {
         let key = getKey(file: file, line: line, function: function)
+        guard var tags = logTagMap[key] as? [Tag] else { return }
+        tags.sort(by: { $0.rawValue < $1.rawValue })
         
         if isNotPrintLog(logLevel: logLevel) {
             logTagMap[key] = nil
             return
         }
-
+        
         var tag = ""
         
         if logTagMap[key] == nil {
             logTagMap[key] = [Tag.NONE]
         }
         
-        if  let tags = (logTagMap[key] as? [Tag])?.sorted(by: {$0.rawValue < $1.rawValue}) {
-            for t in tags {
-                tag += "[\(t.title)]"
-            }
+        for t in tags {
+            tag += "[\(t.title)]"
         }
         
         let fileName = URL(fileURLWithPath: file).lastPathComponent
-        let content = "[\(logLevel.rawValue)] \(tag) [\(fileName)]:\(line) [\(function)]: - \(message)"
+        var imoge: String = "🟢"
+        if tags.contains(.FAIL) {
+            imoge = "❌"
+        }
+        let contents = "\(imoge) [\(logLevel.rawValue)] \(tag) [\(fileName)]:\(line) [\(function)]: - \(message)"
         
-        NSLog(content)
-//        LinphoneManager.instance().printLog(tag, message: content, level: logLevel.linphoneLogLevel)
+        os_log("%@", log: logger, type: .debug, contents)
+        //        NSLog(contents) // NSLog 사용시 contents 가 길어지면 짤린다.
         
         logTagMap[key] = nil
     }

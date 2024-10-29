@@ -70,6 +70,9 @@ enum Tag: Int {
     case URI
     case NAME
     
+    case SUCCESS
+    case FAIL
+    
     // MARK: - NONE 태그
     case NONE
     
@@ -115,45 +118,61 @@ static func f(_ format: String, file: String = #file, line: Int =#line, function
 }
 ```
 
+- AppDelegate
+```swift
+func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+#if DEBUG
+    Log.setLogLevel(.TRACE)
+#else
+    Log.setLogLevel(.ERROR)
+#endif
+        
+    return true
+}
+```
+
 <br>
 
 ## Print Log
 - Log Class 에서 Log Level 을 설정하면 해당 기준으로 아래 Level 로그만 출력한다.
 - Log Level 에 따라 print 될 때 “[LogLevel]” 이 가장 앞에 표기된다.
 - 설정된 태그는 Log Level 뒤에 [Tag1][Tag2][Tag3] ... [TagN] 으로 표기된다.
-- 회사에서는 LinphoneManager SDK 에서 Log 를 출력한다. 출력 결과는 NSLog 동일하다. 단지 SDK Log 는 일부 메세지를 가리거나 특정 처리가 들어간다.
+- NSLog 사용시 Contents 길이가 길어지면 짤리기 때문에 OSLog 로 변경했다.
 
 ```swift
-static private func printLog(_ message: String, logLevel: LogLevel,file: String, line: Int, function: String) {
+static private func printLog(_ message: String, logLevel: LogLevel, file: String, line: Int, function: String) {
     let key = getKey(file: file, line: line, function: function)
+    guard var tags = logTagMap[key] as? [Tag] else { return }
+    tags.sort(by: { $0.rawValue < $1.rawValue })
     
     if isNotPrintLog(logLevel: logLevel) {
         logTagMap[key] = nil
         return
     }
+    
     var tag = ""
     
     if logTagMap[key] == nil {
         logTagMap[key] = [Tag.NONE]
     }
     
-    if  let tags = (logTagMap[key] as? [Tag])?.sorted(by: {$0.rawValue < $1.rawValue}) {
-        for t in tags {
-            tag += "[\(t.title)]"
-        }
+    for t in tags {
+        tag += "[\(t.title)]"
     }
     
     let fileName = URL(fileURLWithPath: file).lastPathComponent
-    let content = "[\(logLevel.rawValue)] \(tag) [\(fileName)]:\(line) [\(function)]: - \(message)"
+    var imoge: String = "🟢"
+    if tags.contains(.FAIL) {
+        imoge = "❌"
+    }
+    let contents = "\(imoge) [\(logLevel.rawValue)] \(tag) [\(fileName)]:\(line) [\(function)]: - \(message)"
     
-    NSLog(content)
-//    LinphoneManager.instance().printLog(tag, message: content, l: logLevel.linphoneLogLevel)
+    os_log("%@", log: logger, type: .debug, contents)
+    //        NSLog(contents) // NSLog 사용시 contents 가 길어지면 짤린다.
     
     logTagMap[key] = nil
 }
 ```
 
 <br>
-
-## Blog Link
-- https://www.notion.so/Log-Structure-7ed8252e54314b389bf79f1da5beab97?pvs=4
