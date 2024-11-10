@@ -33,7 +33,7 @@ Log.tag(.CALL).tag([.URI, .NAME]).d("message")
 ## Tag
 - 여러개 Tag 를 추가 할 수 있다.
 - tag 입력은 Tag enum class 만 가능하며, 단일과 리스트 형태의 파라미터를 허용한다.
-- Tag 를 설정하지 않으면 Tag.NONE 으로 할당된다.
+- Tag 는 하나 이상 반드시 들어가야 한다. Tag 지정 안할 시 assert 에서 거절된다.
 - 기본 Dictionary 사용 시 간헐적으로 Tread Crash 발생하여 NSMutableDictionary 를 사용하여 TagId를 저장한다.
 
 ```swift

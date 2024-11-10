@@ -25,9 +25,6 @@ enum Tag: Int {
     case SUCCESS
     case FAIL
     
-    // MARK: - NONE 태그
-    case NONE
-    
     var title: String {
         return switch self {
         case .MESSAGE:
@@ -83,19 +80,23 @@ class Log {
         if let initValue = logTagMap[key] {
             if var list = initValue as? [Tag] {
                 list.append(contentsOf: tags)
-                logTagMap[key] = list.filter({$0 != Tag.NONE})
+                logTagMap[key] = list
             }
         } else {
-            logTagMap[key] = tags.filter({$0 != Tag.NONE})
+            logTagMap[key] = tags
         }
     }
     
     static private func printLog(_ message: String, logLevel: LogLevel, file: String, line: Int, function: String) {
         let key = getKey(file: file, line: line, function: function)
+        
         guard var tags = logTagMap[key] as? [Tag] else {
             assert(false)
             return
         }
+        
+        assert(!tags.isEmpty)
+        
         tags.sort(by: { $0.rawValue < $1.rawValue })
         
         if isNotPrintLog(logLevel: logLevel) {
@@ -104,10 +105,6 @@ class Log {
         }
         
         var tag = ""
-        
-        if logTagMap[key] == nil {
-            logTagMap[key] = [Tag.NONE]
-        }
         
         for t in tags {
             tag += "[\(t.title)]"
