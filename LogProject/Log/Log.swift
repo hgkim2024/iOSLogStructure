@@ -92,7 +92,10 @@ class Log {
     
     static private func printLog(_ message: String, logLevel: LogLevel, file: String, line: Int, function: String) {
         let key = getKey(file: file, line: line, function: function)
-        guard var tags = logTagMap[key] as? [Tag] else { return }
+        guard var tags = logTagMap[key] as? [Tag] else {
+            assert(false)
+            return
+        }
         tags.sort(by: { $0.rawValue < $1.rawValue })
         
         if isNotPrintLog(logLevel: logLevel) {
